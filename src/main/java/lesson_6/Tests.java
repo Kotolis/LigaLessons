@@ -1,27 +1,32 @@
 package lesson_6;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Tests {
     public static void main(String[] args) {
-        System.out.println();
+        test_4();
+
+
     }
 
     /**
      * Получить List чисел в виде текстовых элементов
      */
-    public void test_1() {
+    public static void test_1() {
         List<Integer> integerList = getIntList();
-    }
+        List<String> strings = integerList.stream().map(Objects::toString).toList();
+        System.out.println(strings);
+             }
 
     /**
      * Отсортировать список по убыванию
      */
-    public void test_2() {
+    public static void test_2() {
         List<Integer> integerList = getIntList();
+        List<Integer> sortedList = integerList.stream().sorted(Collections.reverseOrder()).toList();
+        System.out.println(sortedList);
     }
 
     /**
@@ -30,15 +35,20 @@ public class Tests {
      * В начале итоговой строки должен быть текст "Number list: "
      * В конце итоговой строки должен быть текст "end of list.".
      */
-    public void test_3() {
+    public static void test_3() {
         List<String> stringList = getStringList();
+        String text = stringList.stream().map(item -> "Number - " + item).collect(Collectors.joining(", ","Number list: ", " end of list"));
+        System.out.println(text);
     }
 
     /**
      * Получить мапу со значениями, ключи которых больше трех и меньше девяти
      */
-    public void test_4() {
+    public static void test_4() {
         Map<Integer, String> map = getMap();
+        Map<Integer, String> filterMap = map.entrySet().stream().filter(item -> item.getKey() > 3 & item.getKey() <  9)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        System.out.println(filterMap);
     }
 
     /**
