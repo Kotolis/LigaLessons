@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 public class Tests {
     public static void main(String[] args) {
-        test_4();
+        test_7();
 
 
     }
@@ -59,15 +59,24 @@ public class Tests {
      * Элемент 3: ключ - 2, значение "two"
      * и так далее.
      */
-    public void test_5() {
+    public static void test_5() {
         Map<Integer, String> map = getMap();
+        ArrayList<Map.Entry<Integer, String>> sortList = new ArrayList<>(map.entrySet());
+        Collections.shuffle(sortList);
+        Map<Integer, String> newMap = new LinkedHashMap<>();
+        sortList.forEach(item -> newMap.put(item.getKey(), item.getValue()));
+        System.out.println(newMap);
+
     }
 
     /**
      * Установить во всех элементах isDisplayed = true, и оставить в списке только элементы с value NULL.
      */
-    public void test_6() {
+    public static void test_6() {
         List<WebElement> elements = getElements();
+        List<WebElement> filterElem = elements.stream().peek(item -> item.setDisplayed(true))
+                .filter(item -> item.getValue() == null).toList();
+        filterElem.stream().forEach(item -> System.out.println(item.isDisplayed()+", "+ item.getValue()));
     }
 
     /**
@@ -80,8 +89,9 @@ public class Tests {
      * 5. RADIO_BUTTON
      * 6. IMAGE
      */
-    public void test_7() {
-        List<WebElement> elements = getElements();
+    public static void test_7() {
+
+
     }
 
     /**
@@ -89,8 +99,13 @@ public class Tests {
      * ключ - текст
      * значение - тип элемента
      */
-    public void test_8() {
+    public static void test_8() {
         List<WebElement> elements = getElements();
+        Map<String, Type> map = elements.stream()
+                .filter(item -> item.getText()  != null)
+                .collect(Collectors.toMap(item -> item.getText(), item -> item.getType()));
+        map.entrySet().forEach(el -> System.out.println(el.getKey()+"-"+el.getValue()));
+
     }
 
     /**
@@ -99,6 +114,7 @@ public class Tests {
      */
     public void test_9() {
         List<WebElement> elements = getElements();
+
     }
 
     public static Map<Integer, String> getMap() {
