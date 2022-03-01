@@ -1,13 +1,16 @@
 package lesson_6;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.security.Key;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Tests {
     public static void main(String[] args) {
         test_7();
-
 
     }
 
@@ -90,6 +93,28 @@ public class Tests {
      * 6. IMAGE
      */
     public static void test_7() {
+        List<WebElement> elements = getElements();
+        List<Type> sortList = new ArrayList<Type>();
+        sortList.add(Type.TEXT);
+        sortList.add(Type.INPUT_FIELD);
+        sortList.add(Type.CHECKBOX);
+        sortList.add(Type.BUTTON);
+        sortList.add(Type.RADIO_BUTTON);
+        sortList.add(Type.IMAGE);
+        List<WebElement> newList = elements.stream().peek(item -> item.setDisplayed(!item.isDisplayed()))
+                .sorted((item_1, item_2) -> {
+                  int item1 = sortList.indexOf(item_1.getType());
+                  int item2 = sortList.indexOf(item_2.getType());
+
+                  int x = 0;
+                  if (item1 > item2){
+                      x = 1;
+                  } else if (item1 < item2){
+                      x = -1;
+                  }
+                  return x;
+                }).toList();
+        newList.stream().forEach(item -> System.out.println(item.getType()+", "+item.isDisplayed()));
 
 
     }
@@ -101,10 +126,10 @@ public class Tests {
      */
     public static void test_8() {
         List<WebElement> elements = getElements();
-        Map<String, Type> map = elements.stream()
-                .filter(item -> item.getText()  != null)
-                .collect(Collectors.toMap(item -> item.getText(), item -> item.getType()));
-        map.entrySet().forEach(el -> System.out.println(el.getKey()+"-"+el.getValue()));
+
+        Map<String, Type> newMap = new HashMap<>();
+        elements.stream().filter(item -> item.getText() != null).forEach(item -> newMap.put(item.getText(), item.getType()));
+        newMap.entrySet().forEach(item -> System.out.println(item.getKey()+" "+item.getValue()));
 
     }
 
