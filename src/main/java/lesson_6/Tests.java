@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 public class Tests {
     public static void main(String[] args) {
-        test_7();
+        test_9();
 
     }
 
@@ -49,7 +49,7 @@ public class Tests {
      */
     public static void test_4() {
         Map<Integer, String> map = getMap();
-        Map<Integer, String> filterMap = map.entrySet().stream().filter(item -> item.getKey() > 3 & item.getKey() <  9)
+        Map<Integer, String> filterMap = map.entrySet().stream().filter(item -> item.getKey() > 3 && item.getKey() <  9)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         System.out.println(filterMap);
     }
@@ -68,7 +68,7 @@ public class Tests {
         Collections.shuffle(sortList);
         Map<Integer, String> newMap = new LinkedHashMap<>();
         sortList.forEach(item -> newMap.put(item.getKey(), item.getValue()));
-        System.out.println(newMap);
+        newMap.entrySet().forEach(item ->System.out.println("Ключ - "+item.getKey()+", "+"Значение "+item.getValue()));
 
     }
 
@@ -137,8 +137,36 @@ public class Tests {
      * Получить список элементов, у которых текст или значение оканчивается на число от 500 и более.
      * И отсортировать по увеличению сначала элементы с текстом, а затем по убыванию элементы со значением.
      */
-    public void test_9() {
+    public static void test_9() {
         List<WebElement> elements = getElements();
+        List<WebElement> textElem = elements.stream().filter(item -> item.getText() != null)
+                .filter(item -> Integer.parseInt(item.getText().substring(16))>= 500)
+                .sorted((item_1, item_2) -> {
+                   int x = 0;
+                   if (Integer.parseInt(item_1.getText().substring(16)) > Integer.parseInt(item_2.getText().substring(16))){
+                       x = 1;
+                    } else if (Integer.parseInt(item_1.getText().substring(16)) < Integer.parseInt(item_2.getText().substring(16))){
+                       x = -1;
+                   }
+                   return x;
+                }).toList();
+        List<WebElement> valueElem = elements.stream().filter(item -> item.getValue() != null)
+                .filter(item -> Integer.parseInt(item.getValue().substring(17))>= 500)
+                .sorted((item_1, item_2) -> {
+                    int x = 0;
+                    if (Integer.parseInt(item_1.getValue().substring(17)) < Integer.parseInt(item_2.getValue().substring(17))){
+                        x = 1;
+                    } else if (Integer.parseInt(item_1.getValue().substring(17)) > Integer.parseInt(item_2.getValue().substring(17))){
+                        x = -1;
+                    }
+                    return x;
+                })
+                .toList();
+        List<WebElement>allValue = new ArrayList<>();
+        allValue.addAll(textElem);
+        allValue.addAll(valueElem);
+        allValue.stream().filter(item -> item.getText() != null).forEach(item -> System.out.println(item.getText()));
+        allValue.stream().filter(item -> item.getValue() != null).forEach(item -> System.out.println(item.getValue()));
 
     }
 
